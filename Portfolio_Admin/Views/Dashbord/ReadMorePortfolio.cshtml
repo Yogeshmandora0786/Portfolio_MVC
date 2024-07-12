@@ -1,0 +1,123 @@
+﻿<style>
+    .container {
+        max-width: 1200px;
+        margin: auto;
+        padding: 20px;
+    }
+
+    .blogs {
+        text-align: center;
+        background-color: #f9f9f9;
+        padding: 30px;
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .back-button {
+        text-align: left;
+        margin-bottom: 20px;
+    }
+
+        .back-button button {
+            background-color: #d100009e;
+            color: #140202;
+            border: none;
+            padding: 10px 20px;
+            font-size: 16px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+            .back-button button:hover {
+                background-color: #a800007e;
+            }
+
+    .blogs h2 {
+        text-align: center;
+        font-weight: 500;
+        color: black !important;
+        font-family: 'Cambria', serif;
+        margin-top: 2%;
+    }
+
+    .content, .short-description {
+        text-align: left;
+        margin-top: 20px;
+    }
+
+        .content h3, .short-description h3 {
+            font-family: 'Cambria', serif;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 10px;
+        }
+
+    .meta-info {
+        display: flex;
+        justify-content: space-between;
+        margin-top: 20px;
+        align-items: center;
+    }
+
+        .meta-info .created-by, .meta-info .published-date {
+            flex: 1;
+        }
+
+        .meta-info .created-by {
+            text-align: left;
+        }
+
+        .meta-info .published-date {
+            text-align: right;
+        }
+
+        .meta-info h3 {
+            font-family: 'Cambria', serif;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 10px;
+        }
+
+    hr:not([size]) {
+        height: 3px;
+        background-color: #ccc;
+        border: none;
+        margin: 20px 0;
+    }
+
+    p {
+        font-family: 'Arial', sans-serif;
+        line-height: 1.6;
+        color: #333;
+    }
+</style>
+
+<div class="container">
+    <div class="blogs">
+        <div class="back-button">
+            <button onclick="history.back()">Back</button>
+        </div>
+        <h2>Portfolio</h2>
+        <hr>
+        <h2>@Model.Portfolio_Title</h2>
+        <div class="content">
+            <h3>Content</h3>
+            <p>@Model.Portfolio_Title</p>
+        </div>
+        <div class="short-description">
+            <h3>Short Description</h3>
+            <p>@Model.Short_Description</p>
+        </div>
+        <div class="meta-info">
+            <div class="created-by">
+                <h3>Created By</h3>
+                <p>@Model.CreatedByName</p>
+            </div>
+            <div class="published-date">
+                <h3>Published Date</h3>
+                <p>@Model.PublishedDate.ToString("dd/MM/yyyy")</p>
+            </div>
+        </div>
+    </div>
+</div>
+

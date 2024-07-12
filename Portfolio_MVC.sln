@@ -3,11 +3,14 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.10.35013.160
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Portfolio_Web", "Portfolio_Web\Portfolio_Web.csproj", "{6CA71F0E-E63C-429F-BE2C-03384395CF4D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Portfolio_Web", "Portfolio_Web\Portfolio_Web.csproj", "{6CA71F0E-E63C-429F-BE2C-03384395CF4D}"
+	ProjectSection(ProjectDependencies) = postProject
+		{A673880A-F234-4463-8A08-D80DE822FFE7} = {A673880A-F234-4463-8A08-D80DE822FFE7}
+	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Portfolio_Admin", "Portfolio_Admin\Portfolio_Admin.csproj", "{0D3F3D00-B45B-415F-A3A3-63EA2753114C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Portfolio_Admin", "Portfolio_Admin\Portfolio_Admin.csproj", "{0D3F3D00-B45B-415F-A3A3-63EA2753114C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Portfolio_Api", "Portfolio_Api\Portfolio_Api.csproj", "{A673880A-F234-4463-8A08-D80DE822FFE7}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Portfolio_Api", "Portfolio_Api\Portfolio_Api.csproj", "{A673880A-F234-4463-8A08-D80DE822FFE7}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

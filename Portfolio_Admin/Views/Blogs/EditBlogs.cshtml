@@ -1,0 +1,94 @@
+﻿<!-- Add SweetAlert2 CSS -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+<!-- Add SweetAlert2 JavaScript -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<link href="~/css/blogs.css" rel="stylesheet" />
+<div class="container">
+    <main role="main" class="pb-3">
+        <div class="back-button">
+            <button onclick="history.back()">Back</button>
+        </div>
+        <h1 class="BlogPost-header">Edit Blog</h1>
+        <form method="post" enctype="multipart/form-data" id="blogForm">
+            @*  <div class="mb-3">
+            <label for="Blog_Image" class="form-label">Blog Image</label>
+            <input type="file" class="form-control" id="Blog_Image" name="Blog_Image" required autofocus>
+            </div> *@
+
+            <div class="mb-3">
+                <label for="Blog_Title" class="form-label">Blog Title</label>
+                <input type="text" class="form-control" id="Blog_Title" name="Blog_Title" value="@Model.Blog_Title" required autofocus>
+            </div>
+            <div class="mb-3">
+                <label for="Blog_Content" class="form-label">Blog Content</label>
+                <textarea class="form-control" id="Blog_Content" name="Blog_Content" rows="5" required>@Model.Blog_Content</textarea>
+            </div>
+            <div class="mb-3">
+                <label for="Short_Description" class="form-label">Short Description</label>
+                <textarea class="form-control" id="Short_Description" name="Short_Description" rows="2">@Model.Short_Description</textarea>
+            </div>
+            <div class="mb-3">
+                <label for="PublishedDate" class="form-label">Published Date</label>
+                <input type="text" class="form-control" id="PublishedDate" name="PublishedDate" value="@Model.PublishedDate.ToString("dd/MM/yyyy")">
+            </div>
+            <div class="mb-3 form-check">
+                <input type="checkbox" class="form-check-input" id="Visiable" name="Visiable" @(Model.Visiable == 1 ? "checked" : "")>
+                <label class="form-check-label" for="Visiable">Visible</label>
+            </div>
+            <div class="mb-3">
+                <label for="Author" class="form-label">Author</label>
+                <input type="text" class="form-control" id="Author" name="Author" value="@Model.CreatedByName" disabled>
+                <input type="hidden" id="Blogid" value="@Model.Id">
+            </div>
+            <div class="container d-flex justify-content-center">
+                <button type="submit" class="btn me-5 blog-dark" onclick="UpdateBlog(event)">Update Blog</button>
+            </div>
+        </form>
+    </main>
+</div>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    function UpdateBlog(event) {
+        event.preventDefault();  // Prevent the default form submission
+        var Blog_Title = document.getElementById("Blog_Title").value;
+        var Blog_Content = document.getElementById("Blog_Content").value;
+        var Short_Description = document.getElementById("Short_Description").value;
+        var PublishedDate = document.getElementById("PublishedDate").value;
+        var Visiable = document.getElementById("Visiable").checked ? 1 : 0;
+        var Blogid = document.getElementById("Blogid").value;
+
+        var formData = new FormData();
+        formData.append("Id", Blogid);
+        formData.append("Blog_Title", Blog_Title);
+        formData.append("Blog_Content", Blog_Content);
+        formData.append("Short_Description", Short_Description);
+        formData.append("PublishedDate", PublishedDate);
+        formData.append("Visiable", Visiable);
+
+        $.ajax({
+            url: '/Blogs/AddBlog',
+            type: 'POST',
+            data: formData,
+            cache: false,
+            processData: false,
+            contentType: false,
+            success: function (response) {
+                if (response.code == '200') {
+                    Swal.fire({
+                        title: 'Success!',
+                        text: 'Blog has been added Updated successfully.',
+                        icon: 'success',
+                        confirmButtonText: 'OK'
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            window.location.href = '/Dashbord/Index';
+                        }
+                    });
+                }
+            },
+            error: function (xhr, status, error) {
+                console.error('There was a problem with the request:', error);
+            }
+        });
+    }
+</script>

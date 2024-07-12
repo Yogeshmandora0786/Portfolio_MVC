@@ -1,0 +1,164 @@
+﻿<!-- Add SweetAlert2 CSS -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+<!-- Add SweetAlert2 JavaScript -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<div class="content-wrapper">
+    <div class="card">
+        <div class="card-body pt-3">
+            <div class="tab-content pt-2 border-0">
+                <div class="tab-pane fade show active profile-edit pt-3" id="profile-edit">
+                    <form>
+                        <div class="header-row">
+                            <h2 class="text-center" style="font-weight: 500; color: black; font-family: Cambria;">Edit Profile</h2>
+                            <div class="form-group user-type-group">
+                                <label for="userType" class="user-type-label" style="font-weight: 500; color: black; font-family: Cambria;">User Type:</label>
+                                <input type="text" id="userType" name="userType" class="form-control" maxlength="15" readonly value="@Model.UserType">
+                            </div>
+                        </div>
+                        <hr style="height: 3px;" />
+
+                        <div class="form-group">
+                            <input type="hidden" id="id" name="id" class="form-control" readonly value="@Model.Id">
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group col">
+                                <label for="firstName" style="font-weight: 500; color: black; font-family: Cambria;">First Name</label>
+                                <input type="text" id="firstName" name="firstName" class="form-control" autofocus value="@Model.FirstName">
+                            </div>
+
+                            <div class="form-group col">
+                                <label for="lastName" style="font-weight: 500; color: black; font-family: Cambria;">Last Name</label>
+                                <input type="text" id="lastName" name="lastName" class="form-control" value="@Model.LastName">
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group col">
+                                <label for="email" style="font-weight: 500; color: black; font-family: Cambria;">Email</label>
+                                <input type="email" id="email" name="email" class="form-control" value="@Model.Email">
+                            </div>
+
+                            <div class="form-group col">
+                                <label for="phoneNo" style="font-weight: 500; color: black; font-family: Cambria;">Phone Number</label>
+                                <input type="tel" id="phoneNo" name="phoneNo" class="form-control" value="@Model.PhoneNo">
+                            </div>
+                        </div>
+
+                        <div class="form-group text-center">
+                            <button type="submit" class="btn btn-save" onclick="UpdateData()">Save</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .header-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 20px;
+    }
+
+    .form-group {
+        margin-bottom: 15px;
+    }
+
+    .form-row {
+        display: flex;
+        gap: 15px;
+    }
+
+    .form-control {
+        width: 100%;
+        padding: 10px;
+        margin-top: 5px;
+        font-family: Cambria;
+    }
+
+    .btn-save {
+        background-color: black;
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 5px;
+        transition: background-color 0.3s, color 0.3s;
+    }
+
+        .btn-save:hover {
+            background-color: white;
+            color: black;
+        }
+
+    .col {
+        flex: 1;
+    }
+
+    .user-type-group {
+        display: flex;
+        align-items: center;
+    }
+
+    .user-type-label {
+        margin-right: 10px;
+    }
+
+    .user-type-group .form-control {
+        max-width: 150px;
+    }
+
+    .form-group.text-center {
+        display: flex;
+        justify-content: center;
+    }
+</style>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    function UpdateData() {
+        event.preventDefault();
+        var firstName = document.getElementById("firstName").value;
+        var lastName = document.getElementById("lastName").value;
+        var email = document.getElementById("email").value;
+        var phoneNo = document.getElementById("phoneNo").value;
+        var UpdateUserid = document.getElementById("id").value;
+        var Id = document.getElementById("id").value;
+
+        var formData = new FormData();
+        formData.append("Id", Id);
+        formData.append("FirstName", firstName);
+        formData.append("LastName", lastName);
+        formData.append("Email", email);
+        formData.append("PhoneNo", phoneNo);
+        formData.append("UpdatedBy", UpdateUserid);
+
+        $.ajax({
+            url: '/AdminSetting/UpdateProfile',
+            type: 'PUT',
+            data: formData,
+            cache: false,
+            processData: false,
+            contentType: false,
+            success: function (response) {
+                if (response.code == '200') {
+                    Swal.fire({
+                        title: 'Success!',
+                        text: 'Update Your Profile.',
+                        icon: 'success',
+                        confirmButtonText: 'OK'
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            window.location.href = '/Dashbord/Index';
+                        }
+                    });
+                }
+            },
+            error: function (xhr, status, error) {
+                console.error('There was a problem with the request:', error);
+            }
+        });
+    }
+</script>

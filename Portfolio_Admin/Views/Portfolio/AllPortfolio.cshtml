@@ -1,0 +1,190 @@
+﻿<!-- Add SweetAlert2 CSS -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+<!-- Add SweetAlert2 JavaScript -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<style>
+    /* Center align content */
+    .blogs {
+        text-align: center;
+    }
+
+        /* Style for h2 inside .blogs */
+        .blogs h2 {
+            text-align: center;
+            font-weight: 500;
+            color: black !important;
+            font-family: Cambria;
+        }
+
+    .card-list {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+        max-width: 1250px;
+        padding: 20px;
+        gap: 20px;
+    }
+
+    /* Style for each card */
+    .card {
+        position: relative; /* Ensure relative positioning for child elements */
+        box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+        transition: 0.3s;
+        background-color: white;
+        color: black;
+        margin-top: 10%;
+        overflow: hidden; /* Prevents overflow from child elements */
+    }
+
+        /* Hover effect for the card */
+        .card:hover {
+            box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.2);
+            background-color: black !important;
+            color: white !important;
+        }
+
+        /* Style for images inside card */
+        .card img {
+            width: 50%;
+            margin-left: 25%;
+            margin-top: 5%;
+            height: auto;
+            display: block;
+        }
+
+        /* Style for container within card */
+        .card .container {
+            padding: 16px;
+            text-align: center;
+        }
+
+            /* Style for h4 within container */
+            .card .container h4 {
+                margin-bottom: 1rem;
+            }
+
+        /* Style for card icons */
+        .card .card-icons {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+        }
+
+            /* Style for buttons within card icons */
+            .card .card-icons button {
+                background: none;
+                border: none;
+                color: #333; /* Adjust icon color */
+                cursor: pointer;
+                font-size: 18px;
+                margin-right: 5px;
+                transition: color 0.3s; /* Smooth transition for color change */
+            }
+
+                /* Adjust button color on hover */
+                .card .card-icons button:hover {
+                    color: white; /* Change icon color on hover */
+                }
+
+    /* Ensure consistent font family */
+    #portfolio-cards {
+        justify-content: center; /* Center aligns child elements */
+        align-items: center; /* Center aligns child elements */
+        text-align: center;
+        font-family: Cambria; /* Apply Cambria font family */
+    }
+</style>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<div class="container">
+    <div class="blogs">
+        <h2>Portfolio</h2>
+        <hr>
+    </div>
+
+    <div id="portfolio-cards" class="card-list">
+        <!-- Portfolio cards will be injected here -->
+    </div>
+</div>
+
+<script>
+    $(document).ready(function () {
+        $.ajax({
+            url: '/Portfolio/GetAllPortfolio',
+            type: 'GET',
+            success: function (response) {
+                var portfolioContainer = $('#portfolio-cards');
+
+                // Check if response data length is 0
+                if (response.data.length === 0) {
+                    portfolioContainer.append('<p>No Portfolio items available.........</p>');
+                } else {
+                    response.data.forEach(function (item) {
+                        var imagePath = 'https://localhost:44313/' + item.portfolio_Image_String;
+                        var card = `
+                                    <div class="card">
+                                        <div class="card-icons">
+                                                <button class="btn-edit" title="Edit" data-portfolioid="${item.id}">
+                                                <i class="fa fa-pencil"></i>
+                                            </button>
+                                                    <button class="btn-delete" title="Delete" onclick="DeletePortfolio(event, ${item.id})">
+                                                <i class="fa fa-trash"></i>
+                                            </button>
+                                        </div>
+                                        <img src="${imagePath}" alt="Avatar">
+                                        <div class="container">
+                                                <h4><b>${item.portfolio_Title}</b></h4>
+                                                <p>${item.short_Description}</p>
+                                        </div>
+                                    </div>
+                                `;
+                        portfolioContainer.append(card);
+                    });
+                    // Bind click events for edit and delete buttons after appending to DOM
+                    $('.btn-edit').click(function () {
+                        var portfolioid = $(this).data('portfolioid');
+                        var editUrl = '/Portfolio/EditPortfolio?id=' + portfolioid;
+                        window.location.href = editUrl; // Redirect to edit URL
+                    });
+                }
+            },
+            error: function (error) {
+                console.log('Error fetching portfolio data:', error);
+                $('#portfolio-cards').append('<p>Error fetching portfolio data.</p>');
+            }
+        });
+    });
+
+    function DeletePortfolio(event, id) {
+        event.preventDefault();
+        var formData = new FormData();
+        formData.append("Id", id);
+
+        $.ajax({
+            url: '/Portfolio/DeletePortfolio',
+            type: 'Delete',
+            data: formData,
+            cache: false,
+            processData: false,
+            contentType: false,
+            success: function (response) {
+                if (response.code == '200') {
+                    Swal.fire({
+                        title: 'Success!',
+                        text: 'Portfolio Delete successfully.',
+                        icon: 'success',
+                        confirmButtonText: 'OK'
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            window.location.reload();
+                        }
+                    });
+                }
+            },
+            error: function (xhr, status, error) {
+                console.error('There was a problem with the request:', error);
+            }
+        });
+    }
+</script>

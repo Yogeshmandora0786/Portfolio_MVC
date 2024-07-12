@@ -1,0 +1,206 @@
+﻿
+<style>
+
+    .blogs {
+        text-align: center; /* Aligns content (including h2) to center */
+    }
+
+        /* Optional: Centering h2 if it's not centered by default */
+        .blogs h2 {
+            text-align: center;
+            font-weight: 500;
+            color: black !important;
+            font-family: Cambria;
+        }
+
+    .card-list {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+        max-width: 1250px;
+        padding: 20px;
+        gap: 20px;
+    }
+
+    .card {
+        /* Add shadows to create the "card" effect */
+        box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+        transition: 0.3s;
+        background-color: white;
+        color: black;
+        margin-top: 10%;
+    }
+
+        .card:hover {
+            box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.2);
+            background-color: black !important;
+            color: white !important;
+        }
+
+        .card img {
+            width: 50%; /* Set image width to 50% of its container */
+            max-width: 100%; /* Ensures image does not exceed container width */
+            height: auto; /* Maintains aspect ratio */
+            margin-top: 1rem; /* Optional: Adds some top margin */
+            margin-left: 25%;
+        }
+
+        .card .container {
+            padding: 16px;
+            width: 100%;
+            text-align: center; /* Centers the text */
+        }
+
+            .card .container h4 {
+                margin-bottom: 1rem; /* Add space below the h4 */
+            }
+
+    #portfolio-cards {
+        justify-content: center; /* Center aligns child elements */
+        align-items: center; /* Center aligns child elements */
+        text-align: center;
+        font-family: Cambria; /* Apply Cambria font family */
+    }
+
+    #blogs-cards {
+        justify-content: center; /* Center aligns child elements */
+        align-items: center; /* Center aligns child elements */
+        text-align: center;
+        font-family: Cambria; /* Apply Cambria font family */
+    }
+
+    hr:not([size]) {
+        height: 2px;
+    }
+
+    .btn-primary {
+        color: #fff;
+        background-color: black;
+        border: none; /* Remove border */
+        transition: background-color 0.3s, color 0.3s;
+    }
+
+        .btn-primary:hover {
+            color: black;
+            background-color: #fff;
+            border: none; /* Remove border */
+        }
+
+    .btn-portfolio {
+        color: #fff;
+        background-color: black;
+        border: none; /* Remove border */
+        transition: background-color 0.3s, color 0.3s;
+    }
+
+        .btn-portfolio:hover {
+            color: black;
+            background-color: #fff;
+            border: none; /* Remove border */
+        }
+
+</style>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<div class="container">
+    <div class="row">
+        <div class="col-md-6">
+            <div class="blogs">
+                <h2>Blogs</h2>
+                <hr>
+            </div>
+
+            <div id="blogs-cards" class="card-list">
+                <!-- Portfolio cards will be injected here -->
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="blogs">
+                <h2>Portfolio</h2>
+                <hr>
+            </div>
+
+            <div id="portfolio-cards" class="card-list">
+                <!-- Portfolio cards will be injected here -->
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<script>
+    $(document).ready(function () {
+        $.ajax({
+            url: '/Portfolio/GetAllPortfolio',
+            type: 'GET',
+            success: function (response) {
+                var portfolioContainer = $('#portfolio-cards');
+
+                // Check if response data length is 0
+                if (response.data.length === 0) {
+                    portfolioContainer.append('<p>No portfolio items available.........</p>');
+                } else {
+                    response.data.forEach(function (item) {
+                        var imagePath = 'https://localhost:44313/' + item.portfolio_Image_String; // Adjust this path based on your server setup
+                        var card = `
+                                            <div class="card">
+                                                <img src="${imagePath}" alt="Avatar">
+                                                <div class="container">
+                                                    <h4><b>${item.portfolio_Title}</b></h4>
+                                                    <p>${item.short_Description}</p>
+                                                                        <button class="btn btn-portfolio" title="Read more" data-portid="${item.id}">Read more</button>
+                                                </div>
+                                            </div>
+                                        `;
+                        portfolioContainer.append(card);
+                    });
+                    // Bind click events for edit and delete buttons after appending to DOM
+                    $('.btn-portfolio').click(function () {
+                        var Portfolio = $(this).data('portid');
+                        var editUrl = '/Dashbord/ReadMorePortfolio?id=' + Portfolio;
+                        window.location.href = editUrl; // Redirect to edit URL
+                    });
+                }
+            },
+            error: function (error) {
+                console.log('Error fetching portfolio data:', error);
+                $('#portfolio-cards').append('<p>Error fetching portfolio data.</p>');
+            }
+        });
+
+        $.ajax({
+            url: '/Blogs/GetAllBlog',
+            type: 'GET',
+            success: function (response) {
+                var blogsContainer = $('#blogs-cards');
+
+                if (response.data.length === 0) {
+                    blogsContainer.append('<p>No Blogs items available.........</p>');
+                } else {
+                    response.data.forEach(function (item) {
+                        var imagePath = 'https://localhost:44313/' + item.blog_Image_String;
+                        var card = `
+                                            <div class="card">
+                                                    <img src="${imagePath}" alt="Avatar">
+                                                <div class="container">
+                                                            <h4><b>${item.blog_Title}</b></h4>
+                                                            <p>${item.short_Description}</p>
+                                                                                           <button class="btn btn-primary" title="Edit" data-blogid="${item.id}">Read more</button>
+                                                                                       </div>
+                                                                                       </div>`;
+                        blogsContainer.append(card);
+                    });
+
+                    // Bind click events for edit and delete buttons after appending to DOM
+                    $('.btn-primary').click(function () {
+                        var blogId = $(this).data('blogid');
+                        var editUrl = '/Dashbord/ReadMoreBlogs?id=' + blogId;
+                        window.location.href = editUrl; // Redirect to edit URL
+                    });
+                }
+            },
+            error: function (error) {
+                console.log('Error fetching portfolio data:', error);
+            }
+        });
+    });
+</script>

@@ -1,0 +1,120 @@
+/* Styles for the navbar */
+.navbar {
+    padding: 1rem;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.navbar-brand {
+    display: flex;
+    align-items: center;
+    color: white;
+}
+
+    .navbar-brand img {
+        margin-right: 10px;
+    }
+
+.navbar-nav .nav-link {
+    color: white !important;
+    font-weight: 500;
+    padding: 0.5rem 1rem;
+    border-radius: 5px; /* Adding rounded corners */
+    transition: background-color 0.3s, color 0.3s; /* Adding transition for smooth effect */
+}
+
+    .navbar-nav .nav-link:hover {
+        background-color: #62d6806b !important;
+        color: white !important;
+    }
+
+.navbar-nav .dropdown-menu {
+    background-color: #62d6806b;
+    border: none;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+    .navbar-nav .dropdown-menu .dropdown-item {
+        color: white !important;
+    }
+
+        .navbar-nav .dropdown-menu .dropdown-item:hover {
+            background-color: rgba(255, 255, 255, 0.1) !important; /* Adjust as needed */
+            color: white !important;
+        }
+
+.navbar-light .navbar-text {
+    color: #fff;
+}
+.navbar-text {
+    display: flex;
+    align-items: center;
+    font-weight: 500;
+    color: white; /* Ensure text color is white */
+}
+
+    .navbar-text img {
+        margin-right: 10px;
+    }
+
+@media (max-width: 992px) {
+    .navbar-nav {
+        text-align: center;
+    }
+
+    .navbar-text {
+        justify-content: center;
+        margin-top: 1rem;
+    }
+}
+
+/* Additional styles for better appearance */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f4f4f4;
+}
+
+.container {
+    margin-top: 2rem;
+}
+
+.header-title {
+    font-size: 24px;
+    font-weight: 700;
+    color: #333;
+    margin-bottom: 1rem;
+}
+
+.navbar-toggler {
+    border: none;
+}
+
+    .navbar-toggler:focus {
+        outline: none;
+    }
+
+.navbar-toggler-icon {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3E%3Cpath stroke='rgba(255, 255, 255, 0.5)' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3E%3C/svg%3E");
+}
+
+/* Custom scroll behavior for smooth scrolling */
+html {
+    scroll-behavior: smooth;
+}
+
+.bg-light {
+    --bs-bg-opacity: 1;
+    background-color: #62d6806b !important;
+}
+
+.text-dark {
+    --bs-text-opacity: 1;
+    color: #fff !important;
+    background-color: #62d6806b;
+}
+
+    .text-dark:hover {
+        color: #62d6806b !important;
+        background-color: #fff;
+    }

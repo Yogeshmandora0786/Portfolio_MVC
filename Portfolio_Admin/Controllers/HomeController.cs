@@ -1,16 +1,23 @@
+using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json.Linq;
+using Portfolio_Admin.Helper;
 using Portfolio_Admin.Models;
-using System.Diagnostics;
+using Portfolio_Admin.Repository;
 
 namespace Portfolio_Admin.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly ILogger<HomeController> _logger;
+        private IClientHelper _clientHelper;
+        private AdminViewModel _adminViewModel;
+        private readonly IDataProtector _protector;
 
-        public HomeController(ILogger<HomeController> logger)
+        public HomeController(IClientHelper clientHelper, IDataProtectionProvider dataProtectionProvider)
         {
-            _logger = logger;
+            _clientHelper = clientHelper;
+            _adminViewModel = new AdminViewModel(_clientHelper, dataProtectionProvider);
+            _protector = dataProtectionProvider.CreateProtector("MyCookieEncryptionPurpose");
         }
 
         public IActionResult Index()
@@ -18,15 +25,51 @@ namespace Portfolio_Admin.Controllers
             return View();
         }
 
-        public IActionResult Privacy()
+
+        [HttpGet]
+        public async Task<JsonResult> AdminLogin(Admin admin)
         {
-            return View();
+            try
+            {
+                var res = await _adminViewModel.AdminLogin(admin);
+                if (res != null)
+                {
+                    var cookieOptions = new CookieOptions();
+                    cookieOptions.Expires = DateTime.Now.AddDays(1);
+                    cookieOptions.Path = "/";
+                    JArray jsonArray = JArray.Parse(res.ResponseData);
+                    JObject jsonObject = (JObject)jsonArray[0];
+                    int id = (int)jsonObject["Id"];
+                    string firstName = (string)jsonObject["FirstName"];
+                    string idAsString = id.ToString();
+                    Response.Cookies.Append("UserId", idAsString, cookieOptions);
+                    HttpContext.Session.SetString("FirstName", firstName);
+                    ViewBag.FirstName = firstName; // Add this line
+                }
+                return Json(res);
+            }
+            catch (Exception ex)
+            {
+                string errorMessage = ex.Message;
+                return Json(500, errorMessage);
+            }
         }
 
-        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-        public IActionResult Error()
+
+        public ActionResult Logout()
         {
-            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+           
+            HttpContext.Session.Remove("FirstName");
+            ViewBag.FirstName = null; 
+
+            CookieOptions options = new CookieOptions
+            {
+                Expires = DateTime.Now.AddDays(-1)
+            };
+            Response.Cookies.Append("UserId", "", options);
+
+            return Redirect("~/Home/Index");
         }
+
     }
 }

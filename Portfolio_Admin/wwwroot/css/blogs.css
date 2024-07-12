@@ -1,0 +1,109 @@
+/* Style for the container */
+.container {
+    max-width: 800px; /* Adjust as needed */
+    margin: 0 auto; /* Center align the container */
+    padding: 20px; /* Add padding for spacing */
+}
+
+/* Style for the form */
+form {
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1); /* Box shadow for a subtle lift */
+}
+
+/* Responsive form inputs */
+.form-label {
+    color: black;
+    font-family:Cambria;
+}
+
+.form-control {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 15px;
+    border: 1px solid #ced4da; /* Light border */
+    border-radius: 4px;
+    box-sizing: border-box;
+}
+
+textarea.form-control {
+    resize: vertical; /* Allow vertical resizing */
+}
+
+.form-check-input {
+    margin-top: 0.3rem; /* Adjust checkbox alignment */
+}
+
+    .form-check-input:checked {
+        background-color: #62d6806b !important;
+        border-color: white;
+    }
+
+.btn-primary {
+    background-color: #007bff; /* Blue button color */
+    color: #fff; /* White text color */
+    border: none;
+    padding: 10px 20px;
+    cursor: pointer;
+    border-radius: 4px;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .container {
+        padding: 10px;
+    }
+
+    form {
+        padding: 15px;
+    }
+
+    .btn-primary {
+        width: 100%;
+    }
+}
+
+.blog-dark {
+    --bs-text-opacity: 1;
+    color: #fff !important;
+    background-color: #62d6806b;
+    text-align: center;
+    display: inline-block; /* Ensures block element acts like inline */
+    padding: 10px 20px; /* Adjust padding as needed */
+}
+
+    .blog-dark:hover {
+        color: #62d6806b !important;
+        background-color: #fff;
+    }
+
+
+/* Custom styles for the h2 header */
+.BlogPost-header {
+    font-family: 'Cambria', cursive;
+    font-size: 2rem; /* Adjust font size */
+    color: #000; /* Custom text color */
+    margin-top: 2rem; /* Top margin */
+    margin-bottom: 2rem; /* Bottom margin */
+    text-align: center; /* Center align text */
+    text-transform: uppercase; /* Uppercase text */
+}
+
+.back-button {
+    text-align: left;
+    margin-bottom: 20px;
+}
+
+    .back-button button {
+        background-color: #d100009e;
+        color: #140202;
+        border: none;
+        padding: 10px 20px;
+        font-size: 16px;
+        border-radius: 5px;
+        cursor: pointer;
+    }
+
+        .back-button button:hover {
+            background-color: #a800007e;
