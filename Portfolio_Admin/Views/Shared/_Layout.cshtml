@@ -1,8 +1,13 @@
 ﻿@{
     string firstName = ViewBag.FirstName as string;
+    string userType = ViewBag.UserType as string;
     if (firstName == null)
     {
         firstName = Context.Session.GetString("FirstName");
+    }
+    if (userType == null)
+    {
+        userType = Context.Session.GetString("UserType");
     }
 }
 
@@ -34,24 +39,27 @@
                         <li class="nav-item">
                             <a class="nav-link active" aria-current="page" href="@Url.Action("Index", "Dashbord")">Home</a>
                         </li>
-                        <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                Blogs
-                            </a>
-                            <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                <li><a class="dropdown-item" href="@Url.Action("Index", "Blogs")">Add Blog</a></li>
-                                <li><a class="dropdown-item" href="@Url.Action("AllBlogs", "Blogs")" ">All Blogs</a></li>
-                            </ul>
-                        </li>
-                        <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                Portfolio
-                            </a>
-                            <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                <li><a class="dropdown-item" href="@Url.Action("Index", "Portfolio")">Add Portfolio</a></li>
-                                <li><a class="dropdown-item" href="@Url.Action("AllPortfolio", "Portfolio")">All Portfolio</a></li>
-                            </ul>
-                        </li>
+                        @if (userType == "SuperAdmin")
+                        {
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                    Blogs
+                                </a>
+                                <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                    <li><a class="dropdown-item" href="@Url.Action("Index", "Blogs")">Add Blog</a></li>
+                                    <li><a class="dropdown-item" href="@Url.Action("AllBlogs", "Blogs")">All Blogs</a></li>
+                                </ul>
+                            </li>
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                    Portfolio
+                                </a>
+                                <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                    <li><a class="dropdown-item" href="@Url.Action("Index", "Portfolio")">Add Portfolio</a></li>
+                                    <li><a class="dropdown-item" href="@Url.Action("AllPortfolio", "Portfolio")">All Portfolio</a></li>
+                                </ul>
+                            </li>
+                        }
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                                 Settings

@@ -1,4 +1,5 @@
-﻿
+﻿<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
 <style>
 
     .blogs {
@@ -98,6 +99,23 @@
             border: none; /* Remove border */
         }
 
+    /* New styles for likes and comments */
+    .icons-container {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 10px;
+    }
+
+    .likes, .comments {
+        display: flex;
+        align-items: center;
+    }
+
+        .likes i, .comments i {
+            margin-right: 5px;
+        }
+
 </style>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <div class="container">
@@ -142,15 +160,15 @@
                     response.data.forEach(function (item) {
                         var imagePath = 'https://localhost:44313/' + item.portfolio_Image_String; // Adjust this path based on your server setup
                         var card = `
-                                            <div class="card">
-                                                <img src="${imagePath}" alt="Avatar">
-                                                <div class="container">
-                                                    <h4><b>${item.portfolio_Title}</b></h4>
-                                                    <p>${item.short_Description}</p>
-                                                                        <button class="btn btn-portfolio" title="Read more" data-portid="${item.id}">Read more</button>
+                                                <div class="card">
+                                                    <img src="${imagePath}" alt="Avatar">
+                                                    <div class="container">
+                                                        <h4><b>${item.portfolio_Title}</b></h4>
+                                                        <p>${item.short_Description}</p>
+                                                                            <button class="btn btn-portfolio" title="Read more" data-portid="${item.id}">Read more</button>
+                                                    </div>
                                                 </div>
-                                            </div>
-                                        `;
+                                            `;
                         portfolioContainer.append(card);
                     });
                     // Bind click events for edit and delete buttons after appending to DOM
@@ -179,14 +197,29 @@
                     response.data.forEach(function (item) {
                         var imagePath = 'https://localhost:44313/' + item.blog_Image_String;
                         var card = `
-                                            <div class="card">
-                                                    <img src="${imagePath}" alt="Avatar">
-                                                <div class="container">
-                                                            <h4><b>${item.blog_Title}</b></h4>
-                                                            <p>${item.short_Description}</p>
-                                                                                           <button class="btn btn-primary" title="Edit" data-blogid="${item.id}">Read more</button>
-                                                                                       </div>
-                                                                                       </div>`;
+            <div class="card">
+                <img src="${imagePath}" alt="Avatar">
+                <div class="container">
+                    <h4><b>${item.blog_Title}</b></h4>
+                    <p>${item.short_Description}</p>
+                        <button class="btn btn-primary" title="Edit" data-blogid="${item.id}">Read more</button>
+                          <div class="icons-container mt-3">
+                <div class="likes">
+                    <i class="fa fa-heart" style="color: ${item.totalLikes > 0 ? 'red' : 'inherit'};"></i>
+                    <span>${item.totalLikes}</span>
+                </div>
+                <div class="comments">
+                        <i class="fa fa-comments" style="color: ${item.totalComments > 0 ? '#0dc989' : 'inherit'};"></i>
+                    <span>${item.totalComments}</span>
+                </div>
+                <div class="shares">
+                    <i class="fa fa-share" style="color: ${item.totalShares > 0 ? 'blue' : 'inherit'};"></i>
+                    <span>${item.totalShares}</span>
+                </div>
+            </div>
+                    
+                </div>
+            </div>`;
                         blogsContainer.append(card);
                     });
 

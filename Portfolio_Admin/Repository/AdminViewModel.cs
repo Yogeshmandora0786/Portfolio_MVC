@@ -71,6 +71,20 @@ namespace Portfolio_Admin.Repository
             return res;
         }
 
+        public async Task<CommonResponseModel> ForgetPasswordByEmail(string forgetemail)
+        {
+            CommonResponseModel res = new CommonResponseModel();
+            HttpClient client = await _clientHelper.PrepareAuthenticatedClient();
+            var response = await client.GetAsync("api/Admin/UserData_ByEmail/" + forgetemail + "");
+
+            if (response.IsSuccessStatusCode)
+            {
+                var content = await response.Content.ReadAsStringAsync();
+                res = JsonConvert.DeserializeObject<CommonResponseModel>(content);
+            }
+            return res;
+        }
+
         public async Task<CommonResponseModel> Admin_Upsert(Admin admin)
         {
             try
@@ -122,6 +136,44 @@ namespace Portfolio_Admin.Repository
 
                 // Make a POST request
                 var response = await client.PutAsync("api/Admin/Admin_ChangePassword", content);
+
+                if (response.IsSuccessStatusCode)
+                {
+                    var responseContent = await response.Content.ReadAsStringAsync();
+                    res = JsonConvert.DeserializeObject<CommonResponseModel>(responseContent);
+                }
+                else
+                {
+                    Console.WriteLine($"Error in AdminLogin: {response.StatusCode} - {response.ReasonPhrase}");
+                }
+
+                return res;
+            }
+            catch (HttpRequestException ex) when (ex.InnerException != null)
+            {
+                Console.WriteLine($"Error in AdminLogin: {ex.Message}, Inner Exception: {ex.InnerException.Message}");
+                throw;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error in AdminLogin: {ex.Message}");
+                throw;
+            }
+        }
+
+        public async Task<CommonResponseModel> ChangePassword_ByEmail(Admin admin)
+        {
+            try
+            {
+                CommonResponseModel res = new CommonResponseModel();
+                HttpClient client = await _clientHelper.PrepareAuthenticatedClient();
+
+                // Create the request content
+                var json = JsonConvert.SerializeObject(admin);
+                var content = new StringContent(json, Encoding.UTF8, "application/json");
+
+                // Make a POST request
+                var response = await client.PutAsync("api/Admin/ChangePassword_ByEmail", content);
 
                 if (response.IsSuccessStatusCode)
                 {

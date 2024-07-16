@@ -73,7 +73,7 @@ namespace Portfolio_Api.Repository
                     param.Add("@LastName", admin.LastName, dbType: DbType.String, direction: ParameterDirection.Input);
                     param.Add("@Email", admin.Email, dbType: DbType.String, direction: ParameterDirection.Input);
                     param.Add("@PhoneNo", admin.PhoneNo, dbType: DbType.String, direction: ParameterDirection.Input);
-                    param.Add("@CreatedBy", admin.CreatedBy, dbType: DbType.Int64, direction: ParameterDirection.Input);
+                    param.Add("@Password", admin.Password, dbType: DbType.String, direction: ParameterDirection.Input);
                     param.Add("@UpdatedBy", admin.UpdatedBy, dbType: DbType.Int64, direction: ParameterDirection.Input);
                     var task = connection.QueryMultiple("Proc_Admin_Upsert", param, commandTimeout: 600, commandType: CommandType.StoredProcedure);
                     return task.Read<CommonResponse>().FirstOrDefault();
@@ -83,6 +83,51 @@ namespace Portfolio_Api.Repository
                     throw ex;
                 }
             }
+        }
+
+        public async Task<CommonResponse> UserData_ByEmail(string Email)
+        {
+            using (var connection = _dBContext.CreateConnection())
+            {
+                try
+                {
+                    CommonResponse commonResponse = new CommonResponse();
+
+                    DynamicParameters param = new DynamicParameters();
+                    param.Add("@Email", Email, dbType: DbType.String, direction: ParameterDirection.Input);
+                    var user = await connection.QueryFirstOrDefaultAsync<CommonResponse>("Proc_Admin_By_Email", param, commandType: CommandType.StoredProcedure);
+                    return user;
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"An error occurred: {ex.Message}");
+                    throw;
+                }
+            }
+            throw new NotImplementedException();
+        }
+
+        public async Task<CommonResponse> ChangePassword_ByEmail(AdminModel adminModel)
+        {
+            using (var connection = _dBContext.CreateConnection())
+            {
+                try
+                {
+                    CommonResponse commonResponse = new CommonResponse();
+
+                    DynamicParameters param = new DynamicParameters();
+                    param.Add("@Email", adminModel.Email, dbType: DbType.String, direction: ParameterDirection.Input);
+                    param.Add("@NewPassword", adminModel.Password, dbType: DbType.String, direction: ParameterDirection.Input);
+                    var task = connection.QueryMultiple("ChangePassword_Admin_By_Email", param, commandTimeout: 600, commandType: CommandType.StoredProcedure);
+                    return task.Read<CommonResponse>().FirstOrDefault();
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"An error occurred: {ex.Message}");
+                    throw;
+                }
+            }
+            throw new NotImplementedException();
         }
 
         public async Task<AdminModel> UserData_ById(int Userid)

@@ -42,5 +42,6 @@
         public DateTime? DeletedDate { get; set; }
         public long? DeletedBy { get; set; }
         public string? CreatedByName { get; set; }
+        public string? UserType { get; set; }
     }
 }

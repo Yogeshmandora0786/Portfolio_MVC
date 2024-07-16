@@ -70,6 +70,44 @@ namespace Portfolio_Api.Controllers
             }
         }
 
+        [HttpGet]
+        [Route("UserData_ByEmail/{Email}")]
+        public async Task<IActionResult> UserData_ByEmail(string Email)
+        {
+            try
+            {
+                var user = await _adminRepository.UserData_ByEmail(Email);
+                if (user == null)
+                {
+                    return NotFound();
+                }
+                return Ok(user);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"An error occurred: {ex.Message}");
+            }
+        }
+
+        [HttpPut]
+        [Route("ChangePassword_ByEmail")]
+        public async Task<IActionResult> ChangePassword_ByEmail(AdminModel admin)
+        {
+            try
+            {
+                var user = await _adminRepository.ChangePassword_ByEmail(admin);
+                if (user == null)
+                {
+                    return NotFound();
+                }
+                return Ok(user);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"An error occurred: {ex.Message}");
+            }
+        }
+
 
         private string GenerateToken(AdminModel admin)
         {

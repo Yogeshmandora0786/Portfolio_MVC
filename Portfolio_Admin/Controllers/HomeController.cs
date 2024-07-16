@@ -20,7 +20,12 @@ namespace Portfolio_Admin.Controllers
             _protector = dataProtectionProvider.CreateProtector("MyCookieEncryptionPurpose");
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
+        {
+            return View();
+        }
+
+        public async Task<IActionResult> Signup()
         {
             return View();
         }
@@ -41,10 +46,13 @@ namespace Portfolio_Admin.Controllers
                     JObject jsonObject = (JObject)jsonArray[0];
                     int id = (int)jsonObject["Id"];
                     string firstName = (string)jsonObject["FirstName"];
+                    string userType = (string)jsonObject["UserType"];
                     string idAsString = id.ToString();
                     Response.Cookies.Append("UserId", idAsString, cookieOptions);
                     HttpContext.Session.SetString("FirstName", firstName);
+                    HttpContext.Session.SetString("UserType", userType);
                     ViewBag.FirstName = firstName; // Add this line
+                    ViewBag.UserType = userType; // Add this line
                 }
                 return Json(res);
             }
@@ -56,11 +64,11 @@ namespace Portfolio_Admin.Controllers
         }
 
 
-        public ActionResult Logout()
+        public async Task<IActionResult> Logout()
         {
-           
+
             HttpContext.Session.Remove("FirstName");
-            ViewBag.FirstName = null; 
+            ViewBag.FirstName = null;
 
             CookieOptions options = new CookieOptions
             {
@@ -71,5 +79,42 @@ namespace Portfolio_Admin.Controllers
             return Redirect("~/Home/Index");
         }
 
+        public async Task<IActionResult> ForgetPassword()
+        {
+            return View();
+        }
+
+        [HttpGet]
+        public async Task<JsonResult> ForgetPasswordByEmail(string forgetemail)
+        {
+            try
+            {
+                var res = await _adminViewModel.ForgetPasswordByEmail(forgetemail);
+
+                return Json(res);
+            }
+            catch (Exception ex)
+            {
+                string errorMessage = ex.Message;
+                return Json(500, errorMessage);
+            }
+        }
+
+        [HttpPut]
+        public async Task<JsonResult> ChangePassword_ByEmail(Admin admin)
+        {
+            try
+            {
+                var res = await _adminViewModel.ChangePassword_ByEmail(admin);
+
+                return Json(res);
+            }
+            catch (Exception ex)
+            {
+                string errorMessage = ex.Message;
+                return Json(500, errorMessage);
+
+            }
+        }
     }
 }
